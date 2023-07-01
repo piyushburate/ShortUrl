@@ -1,0 +1,15 @@
+{
+  "name": "shorturl",
+  "version": "1.0.0",
+  "description": "URL Shortner Website",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "PiyushBurate",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7"
+  }
+}
