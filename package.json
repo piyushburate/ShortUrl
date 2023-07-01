@@ -4,12 +4,15 @@
   "description": "URL Shortner Website",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "app": "nodemon app.js",
+    "mysql": "nodemon mysql_db_connection.js",
+    "start": "nodemon app.js && nodemon mysql_db_connection.js"
   },
   "author": "PiyushBurate",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "mysql": "^2.18.1",
     "path": "^0.12.7"
   }
 }
