@@ -11,19 +11,21 @@ let port = 8081
 app.use("/static", express.static(path.resolve(__dirname, "src", "static")))
 
 // Database requests
-app.get("/db", (req, res)=>{
-    database.query("SELECT * FROM users", (err, rows)=>{
+
+app.get("/api/db/:table", (req, res)=>{
+    var query = `SELECT * FROM ${req.params.table}`
+    database.query(query, (err, rows)=>{
         if (err) throw err
         res.send(rows)
     })
 })
 
 // Set Entry Point
-app.get("/*", (req, res)=>{
+app.get("/*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "src", "index.html"))
 })
 
 // Start Server
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log("Listening server at http://localhost:" + port)
 })

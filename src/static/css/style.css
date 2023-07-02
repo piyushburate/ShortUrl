@@ -15,3 +15,7 @@ body {
     background: red;
     font-size: 1rem;
 }
+
+#table {
+    width: 100%;
+}
