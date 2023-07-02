@@ -4,9 +4,7 @@
   "description": "URL Shortner Website",
   "main": "app.js",
   "scripts": {
-    "app": "nodemon app.js",
-    "mysql": "nodemon mysql_db_connection.js",
-    "start": "nodemon app.js && nodemon mysql_db_connection.js"
+    "start": "nodemon app.js"
   },
   "author": "PiyushBurate",
   "license": "ISC",
