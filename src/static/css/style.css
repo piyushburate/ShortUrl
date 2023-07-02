@@ -7,15 +7,101 @@
     font-family: 'Poppins', sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s linear;
 }
 
 body {
     width: 100vw;
     height: 100vh;
-    background: red;
+    /* background: red; */
     font-size: 1rem;
 }
 
-#table {
+#app {
     width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    width: 370px;
+    height: auto;
+    background: white;
+    padding: 32px;
+    box-shadow: 0px 1px 8px #ddd;
+    overflow: hidden;
+    /* border: 1px solid #eee; */
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box .title {
+    font-size: 2rem;
+}
+
+.box form.form {
+    width: 100%;
+    height: auto;
+    margin: 16px 0;
+}
+
+.box form.form .input {
+    width: 100%;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.box form.form .input input {
+    width: 100%;
+    height: 45px;
+    padding: 0px 10px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.box form.form .input a {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.box form.form .input a:hover {
+    color: #222;
+    font-size: 0.9rem;
+}
+.box form.form .submit {
+    width: 100%;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.box form.form .submit input {
+    width: 100%;
+    height: 45px;
+    font-size: 1.1rem;
+    background: #333;
+    color: white;
+    outline: none;
+    border: none;
+}
+
+.box .signup {
+    /* margin: 15px 0; */
+}
+.box .signup a {
+    color: #555;
+}
+.box .signup a:hover {
+    color: #222;
+    font-size: 1.1rem;
 }
