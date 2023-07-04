@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+:root {
+    --sidebar-width: 250px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,14 +11,26 @@
     font-family: 'Poppins', sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    transition: all 0.2s linear;
 }
 
 body {
     width: 100vw;
     height: 100vh;
-    /* background: red; */
     font-size: 1rem;
+}
+
+input,
+button {
+    outline: none;
+    border: none;
+}
+
+.w-6 {
+    width: 60px;
+}
+
+.h-6 {
+    height: 60px;
 }
 
 #app {
@@ -33,7 +49,6 @@ body {
     padding: 32px;
     box-shadow: 0px 1px 8px #ddd;
     overflow: hidden;
-    /* border: 1px solid #eee; */
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -79,6 +94,7 @@ body {
     color: #222;
     font-size: 0.9rem;
 }
+
 .box form.form .submit {
     width: 100%;
     border-radius: 3px;
@@ -95,12 +111,10 @@ body {
     border: none;
 }
 
-/* .box .signup {
-    margin: 15px 0;
-} */
 .box .signup a {
     color: #555;
 }
+
 .box .signup a:hover {
     color: #222;
     font-size: 1.1rem;
@@ -110,27 +124,155 @@ body {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-areas: 
-                'navb navb navb'
-                'side main main'
-                'side main main';
+    grid-template-areas:
+        'navb navb navb'
+        'side main main'
+        'side main main';
     grid-template-rows: 60px 1fr 1fr;
-    grid-template-columns: 300px 1fr 1fr;
+    grid-template-columns: var(--sidebar-width) 1fr 1fr;
 }
 
 .dashboard .navbar {
     height: 60px;
-    background: red;
+    background: white;
     grid-area: navb;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.navbar .sidebar_toggle {
+    display: none;
+}
+
+.navbar .brand {
+    font-size: 2rem;
+    padding: 0 20px;
 }
 
 .dashboard .sidebar {
-    width: 300px;
-    background: yellow;
+    background: white;
+    border-right: 2px solid #ddd;
     grid-area: side;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.sidebar .create_new {
+    width: 100%;
+    padding: 10px 15px;
+}
+
+.sidebar .create_new button {
+    width: 100%;
+    height: 45px;
+    font-size: 1.1rem;
+    background: black;
+    color: white;
+    border-radius: 4px;
+}
+
+.sidebar .menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.sidebar .menu .menuitem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    padding: 4px 0;
+    border-radius: 4px;
+    position: relative;
+}
+
+.sidebar .menu .menuitem.active {
+    background: #f0f0f0;
+}
+
+.sidebar .menu .menuitem.active::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: black;
+    border-radius: 4px;
+    position: absolute;
+    top: 14px;
+    left: 0;
+}
+
+.sidebar .menu .menuitem:hover {
+    background: #f0f0f0;
+}
+
+.sidebar .menu .menuitem .icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px 0 10px;
+    padding: 9px;
+}
+
+.sidebar .menu .menuitem .title {
+    width: auto;
 }
 
 .dashboard .main {
-    background: green;
+    background: white;
     grid-area: main;
+}
+
+.cancel_bg {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: none;
+}
+
+/* Screen Breakpoints */
+@media screen and (max-width:768px) {
+    .dashboard {
+        grid-template-areas:
+            'navb navb navb'
+            'main main main'
+            'main main main';
+    }
+
+    .navbar .sidebar_toggle {
+        width: 60px;
+        height: 100%;
+        padding: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .dashboard .sidebar {
+        max-width: var(--sidebar-width);
+        width: 80%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -200%;
+        z-index: 20;
+        right: 50px;
+        transition: all 0.3s ease-out;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
 }
