@@ -11,7 +11,7 @@ let port = 3000
 app.use("/static", express.static(path.resolve(__dirname, "src", "static")))
 
 // Set Entry Points
-app.get("/user/:id", (req, res) => {
+app.get("/user/*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "src", "index.html"))
 })
 

@@ -2,6 +2,8 @@
 
 :root {
     --sidebar-width: 250px;
+    --section-divider-color: #ddd;
+    --section-divider-width: 1px;
 }
 
 * {
@@ -25,12 +27,28 @@ button {
     border: none;
 }
 
+a {
+    color: unset;
+    text-decoration: none;
+}
+
 .w-6 {
     width: 60px;
 }
 
 .h-6 {
     height: 60px;
+}
+
+.cancel_bg {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: none;
 }
 
 #app {
@@ -141,7 +159,7 @@ button {
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
 }
 
 .navbar .sidebar_toggle {
@@ -155,7 +173,7 @@ button {
 
 .dashboard .sidebar {
     background: white;
-    border-right: 2px solid #ddd;
+    border-right: var(--section-divider-width) solid var(--section-divider-color);
     grid-area: side;
     display: flex;
     flex-direction: column;
@@ -165,16 +183,20 @@ button {
 
 .sidebar .create_new {
     width: 100%;
-    padding: 10px 15px;
+    display: flex;
 }
 
 .sidebar .create_new button {
-    width: 100%;
+    width: auto;
+    flex: 1 1 100%;
     height: 45px;
     font-size: 1.1rem;
     background: black;
     color: white;
     border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0px 1px 10px #999;
+    margin: 10px 15px;
 }
 
 .sidebar .menu {
@@ -189,14 +211,27 @@ button {
     width: 100%;
     display: flex;
     align-items: center;
-    margin: 8px 0;
+    margin: 6px 0;
     padding: 4px 0;
     border-radius: 4px;
     position: relative;
+    color: #555;
+    transition: all 0.1s linear;
 }
 
 .sidebar .menu .menuitem.active {
-    background: #f0f0f0;
+    background: #f6f6f6;
+    color: black;
+}
+
+.sidebar .menu .menuitem:hover {
+    background: #f6f6f6;
+    color: black;
+}
+
+.sidebar .menu .menuitem:hover>* {
+    transition: all 0.2s ease-in-out;
+    transform: translateX(5px);
 }
 
 .sidebar .menu .menuitem.active::before {
@@ -208,10 +243,6 @@ button {
     position: absolute;
     top: 14px;
     left: 0;
-}
-
-.sidebar .menu .menuitem:hover {
-    background: #f0f0f0;
 }
 
 .sidebar .menu .menuitem .icon {
@@ -230,18 +261,126 @@ button {
     grid-area: main;
 }
 
-.cancel_bg {
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    display: none;
+.main .links_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    position: relative;
+    background: #f4f6fa;
+}
+
+.main .links_container > .title {
+    width: 100%;
+    height: 80px !important;
+    background: white;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+    padding: 10px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.main .links_container .link_list {
+    width: 30%;
+    height: calc(100% - 80px) !important;
+    height: min-content;
+    border-right: var(--section-divider-width) solid var(--section-divider-color);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+.main .links_container .link_list .title {
+    width: 100%;
+    padding: 10px 20px;
+    color: #555;
+    font-size: 1rem;
+    text-align: right;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+}
+
+.main .links_container .link_list .link {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+    cursor: pointer;
+}
+.main .links_container .link_list .link.active {
+    background: white;
+}
+.main .links_container .link_list .link .date_created {
+    width: 100%;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.main .links_container .link_list .link .long_url {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #444;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.main .links_container .link_list .link .short_url {
+    width: auto;
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    color: #111;
+    margin-right: 10px;
+}
+.main .links_container .link_list .link .clicks {
+    width: fit-content;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #666;
+}
+.main .links_container .link_list .link .clicks span {
+    height: 17px;
+    margin: 0 8px;
+}
+.main .links_container .link_list .link .clicks svg {
+    width: 17px;
+    height: 17px;
+}
+
+.main .links_container .link_overview {
+    width: 70%;
+    height: calc(100% - 80px) !important;
 }
 
 /* Screen Breakpoints */
+@media screen and (max-width:1180px) {
+    .main .links_container .link_list {
+        width: 40%;
+    }
+
+    .main .links_container .link_overview {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width:900px) {
+    .main .links_container .link_list {
+        width: 45%;
+    }
+
+    .main .links_container .link_overview {
+        width: 55%;
+    }
+}
+
 @media screen and (max-width:768px) {
     .dashboard {
         grid-template-areas:
@@ -274,5 +413,28 @@ button {
 
     .sidebar.show {
         left: 0;
+    }
+
+    .main .links_container .link_list {
+        width: 40%;
+    }
+
+    .main .links_container .link_overview {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width:550px) {
+    .main .links_container .link_list {
+        width: 100%;
+    }
+
+    .main .links_container .link_overview {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
     }
 }
