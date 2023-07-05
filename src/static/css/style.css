@@ -37,6 +37,16 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+a[data-link-user]:hover,
+a[data-link]:hover {
+    color: unset;
+    text-decoration: none;
+}
+
 .w-6 {
     width: 60px;
 }
@@ -324,7 +334,7 @@ a {
     background: white;
 }
 
-.main .links_container .link_list .link::before {
+.main .links_container .link_list .link .link_active {
     content: '';
     width: 10px;
     height: 10px;
@@ -334,6 +344,10 @@ a {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+.main .links_container .link_list .link .link_active.false {
+    background: red;
+    box-shadow: 0px 1px 10px lightcoral;
 }
 
 .main .links_container .link_list .link .date_created {
@@ -527,7 +541,7 @@ a {
 }
 
 .main .links_container .link_overview .link_details .clicks span,
-.main .links_container .link_overview .link_data .long_url span {
+.main .links_container .link_overview .link_data .long_url a {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;

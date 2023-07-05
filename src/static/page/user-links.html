@@ -3,7 +3,8 @@
     <div class="link_list">
         <div class="title">Overview</div>
         <!-- Sample Link -->
-        <div class="link">
+        <!-- <div class="link">
+            <span class="link_active"></span>
             <span class="date_created">JUN 8, 2023</span>
             <span class="long_url">https://ubuntu.com/tutorials/command-line-for-beginners#1-overview</span>
             <span class="short_url">short.url/lectlinux21</span>
@@ -15,7 +16,7 @@
                 </svg>
                 <span>2698</span>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="link_overview">
         <div class="link_header">
@@ -44,12 +45,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                 </svg>
-                <span>1296 Total Engagements</span>
+                <span> Engagements</span>
             </div>
         </div>
         <div class="link_data">
             <div class="short_url">
-                <span>short.url/pract28</span>
+                <span>short.url/</span>
                 <button class="copy">Copy</button>
             </div>
             <div class="clicks">
@@ -58,7 +59,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" />
                 </svg>
-                <span>1296 clicks</span>
+                <span> clicks</span>
             </div>
             <div class="long_url">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -66,7 +67,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                 </svg>
-                <span>https://drive.google.com/drive/folders/1mVED0qCAWunlEp17THqvnSbiLaA0M3i_?usp=sharing</span>
+                <a href="" target="_blank">link</a>
             </div>
             <div class="qr_section">
                 <div class="title">QR Code</div>
@@ -105,26 +106,69 @@
 </div>
 
 <script>
-    function linkClick() {
-        $(".link").each((i, link) => {
-            $(link).on("click", () => {
-                $(".link").each((i, link) => {
-                    $(link).removeClass("active")
-                })
-                $(link).addClass("active")
-                $(".link_overview").addClass("active")
-                $(".link_overview .link_header svg").on("click", () => {
-                    $(link).removeClass("active")
-                    $(".link_overview.active").removeClass("active")
-                    console.log(i);
-                    $(".link_overview .link_header svg").on("click", null)
-                })
-                // console.log(link);
-            })
+    var makeRequest = async url => {
+        let p = await fetch(url)
+        let response = await p.json()
+        return response
+    }
+
+    var linkClick = async (link, id) => {
+        $(".link").each((i, l) => {
+            $(l).removeClass("active")
+        })
+        $(link).addClass("active")
+        $(".link_overview").addClass("active")
+        $(".link_overview .link_header svg").on("click", () => {
+            $(link).removeClass("active")
+            $(".link_overview").removeClass("active")
+            $(".link_overview .link_header svg").on("click", null)
+        })
+
+        var data = await makeRequest("/api/db/0/links/" + id)
+        // console.log(data)
+        $(".link_details .title span").html(data[0].title)
+        $(".link_details .datetime_created span").html(data[0].datetime)
+        $(".link_overview .link_details .clicks span").html(data[0].clicks + " Engagements")
+        $(".link_overview .link_data .clicks span").html(data[0].clicks + " clicks")
+        $(".link_overview .short_url span").html("short.url/" + data[0].code)
+        $(".link_overview .long_url a").html(data[0].link)
+        $(".link_overview .long_url a").attr("href", data[0].link)
+        $(".link_overview .short_url .copy").on("click", () => {
+            window.navigator.clipboard.writeText($(".link_overview .short_url span").text())
+            $(".link_overview .short_url .copy").text("Copied!")
+            setTimeout(() => {
+                $(".link_overview .short_url .copy").text("Copy")
+            }, 3000);
         })
     }
-    linkClick()
-    // $(".link_list").children(".link").get(0).click()
 
-    
+
+    var loadLinks = async () => {
+        let data = await makeRequest("/api/db/0/links")
+        // console.log(data);
+        for (let i = 0; i < data.length; i++) {
+            var link =
+                `<div class="link">
+                    <span class="link_active ${data[i].link_active == 1}"></span>
+                    <span class="date_created">${data[i].datetime}</span>
+                    <span class="long_url">${data[i].link}</span>
+                    <span class="short_url">short.url/${data[i].code}</span>
+                    <div class="clicks">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                        </svg>
+                        <span>${data[i].clicks}</span>
+                        </div>
+                        </div>`
+            var linkElement = $(link)
+            linkElement.on("click", () => {
+                linkClick(linkElement, data[i].id)
+            })
+            $(".link_list").append(linkElement)
+        }
+    }
+
+    loadLinks()
 </script>
