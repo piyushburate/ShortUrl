@@ -2,9 +2,8 @@
     <div class="title">Links</div>
     <div class="link_list">
         <div class="title">Overview</div>
-
         <!-- Sample Link -->
-        <div class="link active">
+        <div class="link">
             <span class="date_created">JUN 8, 2023</span>
             <span class="long_url">https://ubuntu.com/tutorials/command-line-for-beginners#1-overview</span>
             <span class="short_url">short.url/lectlinux21</span>
@@ -44,9 +43,15 @@
                 <span>1296</span>
             </div>
         </div>
-
     </div>
     <div class="link_overview">
+        <div class="link_header">
+            <span class="title">Link Overview</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
         <div class="link_details">
             <div class="title">Study Drive Folder</div>
             <div class="datetime_created">August 23, 2022 7:33 PM GMT+5:30</div>
@@ -66,3 +71,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    function linkClick() {
+        $(".link").each((i, link) => {
+            $(link).on("click", () => {
+                $(".link").each((i, link) => {
+                    $(link).removeClass("active")
+                })
+                $(link).addClass("active")
+                $(".link_overview").addClass("active")
+                $(".link_overview .link_header svg").on("click", () => {
+                    $(link).removeClass("active")
+                    $(".link_overview.active").removeClass("active")
+                    console.log(i);
+                    $(".link_overview .link_header svg").on("click", null)
+                })
+                console.log(link);
+            })
+        })
+    }
+    linkClick()
+    $(".link_list").children(".link").get(0).click()
+</script>

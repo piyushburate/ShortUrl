@@ -16,18 +16,22 @@ let router = async (page) => {
                 $(".main").load("/static/page/user-" + path[3] + ".html")
                 $(".menu").children().removeClass("active")
                 $(".menuitem." + path[3]).addClass("active")
-                $(".cancel_bg").click()
+                $(".cancel_bg").trigger("click")
+                document.title = "User " + path[3]
             } else {
                 $("#app").load("/static/page/user.html")
+                document.title = "User overview"
             }
             break;
 
         case "login":
             $("#app").load("/static/page/login.html")
+            document.title = "Login"
             break;
 
         case "signup":
             $("#app").load("/static/page/signup.html")
+            document.title = "Signup"
             break;
 
         default:
@@ -38,7 +42,7 @@ let router = async (page) => {
 window.onpopstate = () => { router(null) }
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.onclick = e => {
+    $("body").on("click", e => {
         if (e.target.matches("[data-link]")) {
             e.preventDefault()
             goTo(e.target.href, null)
@@ -48,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault()
             goTo(e.target.href, "user")
         }
-    }
+    })
 
     router(null)
 })

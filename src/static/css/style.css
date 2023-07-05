@@ -271,7 +271,7 @@ a {
     background: #f4f6fa;
 }
 
-.main .links_container > .title {
+.main .links_container>.title {
     width: 100%;
     height: 80px !important;
     background: white;
@@ -291,6 +291,7 @@ a {
     display: flex;
     flex-direction: column;
 }
+
 .main .links_container .link_list .title {
     width: 100%;
     padding: 10px 20px;
@@ -308,9 +309,11 @@ a {
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
     cursor: pointer;
 }
+
 .main .links_container .link_list .link.active {
     background: white;
 }
+
 .main .links_container .link_list .link .date_created {
     width: 100%;
     font-size: 0.75rem;
@@ -337,6 +340,7 @@ a {
     color: #111;
     margin-right: 10px;
 }
+
 .main .links_container .link_list .link .clicks {
     width: fit-content;
     height: 20px;
@@ -346,10 +350,12 @@ a {
     font-size: 0.85rem;
     color: #666;
 }
+
 .main .links_container .link_list .link .clicks span {
     height: 17px;
     margin: 0 8px;
 }
+
 .main .links_container .link_list .link .clicks svg {
     width: 17px;
     height: 17px;
@@ -358,6 +364,67 @@ a {
 .main .links_container .link_overview {
     width: 70%;
     height: calc(100% - 80px) !important;
+    overflow: auto;
+    display: none;
+    flex-direction: column;
+    background: #f4f6fa;
+}
+
+.main .links_container .link_overview.active {
+    display: flex;
+}
+
+.main .links_container .link_overview .link_header {
+    width: 100%;
+    height: 60px;
+    background: white;
+    padding: 8px;
+    display: none;
+    align-items: center;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+}
+
+.main .links_container .link_overview .link_header .title {
+    flex: 1 1 auto;
+    font-size: 1.5rem;
+    padding: 0 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.main .links_container .link_overview .link_header svg {
+    width: 50px;
+    height: 50px;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #555;
+}
+
+.main .links_container .link_overview .link_header svg:hover {
+    background: #f0f0f0;
+    color: black;
+}
+
+.main .links_container .link_overview .link_details {
+    width: auto;
+    height: fit-content !important;
+    background: white;
+    margin: 30px;
+    padding: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.main .links_container .link_overview .link_data {
+    width: auto;
+    height: fit-content !important;
+    background: white;
+    margin: 30px;
+    margin-top: 0;
+    padding: 30px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 /* Screen Breakpoints */
@@ -432,9 +499,18 @@ a {
     .main .links_container .link_overview {
         width: 100%;
         height: 100%;
-        position: absolute;
+        display: flex;
+        position: fixed;
         top: 0;
+        left: -200%;
+        transition: all 0.3s ease-out;
+    }
+
+    .main .links_container .link_overview.active {
         left: 0;
-        display: none;
+    }
+
+    .main .links_container .link_overview.active .link_header {
+        display: flex;
     }
 }
