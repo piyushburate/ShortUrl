@@ -11,8 +11,13 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    user-select: none;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-drag: none;
 }
 
 body {
@@ -276,7 +281,7 @@ a {
     height: 80px !important;
     background: white;
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
-    padding: 10px;
+    padding: 10px 30px;
     font-size: 2rem;
     display: flex;
     align-items: center;
@@ -308,10 +313,27 @@ a {
     padding: 10px 20px;
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
     cursor: pointer;
+    position: relative;
+}
+
+.main .links_container .link_list .link:hover {
+    background: #f0f0f3;
 }
 
 .main .links_container .link_list .link.active {
     background: white;
+}
+
+.main .links_container .link_list .link::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: green;
+    box-shadow: 0px 1px 10px lightgreen;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .main .links_container .link_list .link .date_created {
@@ -408,23 +430,161 @@ a {
 
 .main .links_container .link_overview .link_details {
     width: auto;
-    height: fit-content !important;
+    height: max-content !important;
     background: white;
     margin: 30px;
     padding: 30px;
     border-radius: 8px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .main .links_container .link_overview .link_data {
     width: auto;
-    height: fit-content !important;
+    height: max-content !important;
     background: white;
     margin: 30px;
     margin-top: 0;
     padding: 30px;
     border-radius: 8px;
+    /* overflow: auto; */
+}
+
+.main .links_container .link_overview .link_details .title,
+.main .links_container .link_overview .link_data .short_url {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main .links_container .link_overview .link_details .title span,
+.main .links_container .link_overview .link_data .short_url span {
+    width: 100%;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    width: 100%;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.main .links_container .link_overview .link_details .title button.edit,
+.main .links_container .link_overview .link_data .short_url button.copy {
+    height: 40px;
+    padding: 10px 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    background: white;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+.main .links_container .link_overview .link_details .title button.edit:hover,
+.main .links_container .link_overview .link_data .short_url button.copy:hover {
+    background: #f4f4f4;
+    color: #111;
+}
+
+.main .links_container .link_overview .link_details .datetime_created,
+.main .links_container .link_overview .link_data .clicks {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    color: #333;
+}
+
+.main .links_container .link_overview .link_details .datetime_created svg,
+.main .links_container .link_overview .link_data .clicks svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.main .links_container .link_overview .link_details .datetime_created span,
+.main .links_container .link_overview .link_data .clicks span {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.main .links_container .link_overview .link_details .clicks,
+.main .links_container .link_overview .link_data .long_url {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    color: #333;
+}
+
+.main .links_container .link_overview .link_details .clicks svg,
+.main .links_container .link_overview .link_data .long_url svg {
+    width: 17px;
+    height: 17px;
+    margin-right: 5px;
+}
+
+.main .links_container .link_overview .link_details .clicks span,
+.main .links_container .link_overview .link_data .long_url span {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.main .links_container .link_overview .link_data .qr_section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.main .links_container .link_overview .link_data .qr_section .title {
+    width: 100%;
+    font-size: 1.2rem;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_code {
+    width: fit-content;
+    display: flex;
+    margin: 0 20px 15px 0;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_code img {
+    width: 130px;
+    height: 130px;
+    background: #000;
+    opacity: 0.7;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_actions {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_actions button {
+    /* width: 130px; */
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    background: white;
+    border: 1.5px solid #ccc;
+    color: #444;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_actions button:hover {
+    background: #f4f4f4;
+    color: #222;
+}
+.main .links_container .link_overview .link_data .qr_section .qr_actions button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 
 /* Screen Breakpoints */
@@ -497,13 +657,15 @@ a {
     }
 
     .main .links_container .link_overview {
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh !important;
         display: flex;
+        border: var(--section-divider-width) solid var(--section-divider-color);
+        box-shadow: 2px 2px 10px #ccc;
         position: fixed;
         top: 0;
         left: -200%;
-        transition: all 0.3s ease-out;
+        transition: left 0.3s ease;
     }
 
     .main .links_container .link_overview.active {
@@ -512,5 +674,11 @@ a {
 
     .main .links_container .link_overview.active .link_header {
         display: flex;
+    }
+
+    .main .links_container .link_overview .link_details,
+    .main .links_container .link_overview .link_data {
+        margin: 10px;
+        padding: 20px;
     }
 }
