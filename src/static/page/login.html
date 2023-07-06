@@ -1,20 +1,52 @@
 <div class="box">
     <div class="title">Login Form</div>
-    <form class="form" action="/login" method="post" name="login_form">
+    <form class="form" action="/authLogin" method="post" name="login_form" autocomplete="on">
         <div class="input username">
             <label for="form_username">Username</label>
-            <input type="text" name="username" id="form_username">
+            <input type="text" name="username" id="form_username" minlength="3" maxlength="20" required autocomplete="on">
         </div>
         <div class="input password">
             <label for="form_password">Password</label>
-            <input type="password" name="password" id="form_password">
+            <input type="password" name="password" id="form_password" minlength="8" maxlength="15" required autocomplete="on">
             <a href="#">Forgot password?</a>
         </div>
         <div class="submit">
             <input type="submit" value="Submit">
         </div>
     </form>
-    <div class="signup">
+    <div class="extra">
         Not a user? <a href="/signup" data-link>Signup now</a>
     </div>
 </div>
+<script>
+    var makeRequest = async (url, data) => {
+        let p = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        let response = await p.json()
+        return response
+    }
+
+    var login = async () => {
+        var form_data = {
+            username: $("#form_username").val(),
+            password: $("#form_password").val()
+        }
+        var url = $(".form").attr("action")
+        var data = await makeRequest(url, form_data)
+        console.log(data);
+        if (data.status == "error") {
+            alert("Error: " + data.error)
+        } else {
+            window.location.reload()
+        }
+    }
+
+    $(".form").on("submit", e => {
+        e.preventDefault()
+        login()
+    })
+
+</script>

@@ -134,7 +134,12 @@
         $(".link_overview .long_url a").html(data[0].link)
         $(".link_overview .long_url a").attr("href", data[0].link)
         $(".link_overview .short_url .copy").on("click", () => {
-            window.navigator.clipboard.writeText($(".link_overview .short_url span").text())
+            var copy = $('<input>').val(window.location.host + "/" + data[0].code)
+            $("body").append(copy)
+            copy.select()
+            document.execCommand("copy")
+            document.activeElement.blur()
+            copy.remove()
             $(".link_overview .short_url .copy").text("Copied!")
             setTimeout(() => {
                 $(".link_overview .short_url .copy").text("Copy")

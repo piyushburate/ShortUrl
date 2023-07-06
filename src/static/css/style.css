@@ -144,11 +144,11 @@ a[data-link]:hover {
     border: none;
 }
 
-.box .signup a {
+.box .extra a {
     color: #555;
 }
 
-.box .signup a:hover {
+.box .extra a:hover {
     color: #222;
     font-size: 1.1rem;
 }
@@ -449,7 +449,6 @@ a[data-link]:hover {
     margin: 30px;
     padding: 30px;
     border-radius: 8px;
-    /* overflow: hidden; */
 }
 
 .main .links_container .link_overview .link_data {

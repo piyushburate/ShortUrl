@@ -1,31 +1,81 @@
 <div class="box">
     <div class="title">Signup Form</div>
-    <form class="form" action="/signup" method="post" name="login_form">
+    <form class="form" action="/authSignup" method="get" name="signup_form" autocomplete="on">
         <div class="input name">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="form_name">
+            <label for="form_name">Name</label>
+            <input type="text" name="name" id="form_name" required autocomplete="on">
         </div>
         <div class="input email">
-            <label for="email">Email</label>
-            <input type="text" name="email" id="form_email">
+            <label for="form_email">Email</label>
+            <input type="email" name="email" id="form_email" required autocomplete="on">
         </div>
         <div class="input username">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="form_username">
+            <label for="form_username">Username</label>
+            <input type="text" name="username" id="form_username" minlength="3" maxlength="20" required
+                autocomplete="on">
         </div>
         <div class="input password">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="form_password">
+            <label for="form_password">Password</label>
+            <input type="password" name="password" id="form_password" minlength="8" maxlength="15" required
+                autocomplete="on">
         </div>
         <div class="input confirm_password">
-            <label for="password">Confirm Password</label>
-            <input type="password" name="confirm_password" id="form_confirm_password">
+            <label for="form_confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" id="form_confirm_password" minlength="8" maxlength="15"
+                required autocomplete="on">
         </div>
         <div class="submit">
             <input type="submit" value="Submit">
         </div>
     </form>
-    <div class="signup">
-        Not a user? <a href="/login" data-link>Login now</a>
+    <div class="extra">
+        Already a user? <a href="/login" data-link>Login now</a>
     </div>
 </div>
+<script>
+    var makeRequest = async (url, data) => {
+        let p = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        let response = await p.json()
+        return response
+    }
+
+    var signup = async () => {
+        var form_data = {
+            name: $("#form_name").val(),
+            email: $("#form_email").val(),
+            username: $("#form_username").val(),
+            password: $("#form_password").val()
+        }
+        var url = $(".form").attr("action")
+        var data = await makeRequest(url, form_data)
+        console.log(data);
+        if (data.status == "ok") {
+            var creds = {
+                username: data.username,
+                password: data.password
+            }
+            var url2 = "/authLogin"
+            let data2 = await makeRequest(url2, creds)
+            if (data.status == "error") {
+                alert("Error: " + data.error)
+            } else {
+                window.location.reload()
+            }
+        }
+    }
+
+    $(".form").on("submit", e => {
+        e.preventDefault()
+        if ($("#form_password").val() != $("#form_confirm_password").val()) {
+            alert("Error: Password and Confirm Password are not equal!")
+        } else {
+            console.log("submitted");
+            signup()
+        }
+    })
+
+</script>
