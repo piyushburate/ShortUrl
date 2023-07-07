@@ -55,7 +55,7 @@ a[data-link]:hover {
     height: 60px;
 }
 
-.cancel_bg {
+#cancel_bg {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
@@ -345,6 +345,7 @@ a[data-link]:hover {
     top: 10px;
     right: 10px;
 }
+
 .main .links_container .link_list .link .link_active.false {
     background: red;
     box-shadow: 0px 1px 10px lightcoral;
@@ -459,7 +460,6 @@ a[data-link]:hover {
     margin-top: 0;
     padding: 30px;
     border-radius: 8px;
-    /* overflow: auto; */
 }
 
 .main .links_container .link_overview .link_details .title,
@@ -561,24 +561,27 @@ a[data-link]:hover {
     font-weight: 600;
     margin-bottom: 10px;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_code {
     width: fit-content;
     display: flex;
     margin: 0 20px 15px 0;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_code img {
     width: 130px;
     height: 130px;
     background: #000;
     opacity: 0.7;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_actions {
     width: auto;
     display: flex;
     flex-direction: column;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_actions button {
-    /* width: 130px; */
     padding: 10px 20px;
     margin-bottom: 5px;
     background: white;
@@ -590,14 +593,160 @@ a[data-link]:hover {
     cursor: pointer;
     transition: all 0.15s ease-in-out;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_actions button:hover {
     background: #f4f4f4;
     color: #222;
 }
+
 .main .links_container .link_overview .link_data .qr_section .qr_actions button svg {
     width: 20px;
     height: 20px;
     margin-right: 10px;
+}
+
+.dialog {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: none;
+    justify-content: center;
+    align-items: start;
+    z-index: 30;
+    padding: 50px 0;
+    overflow: hidden;
+}
+
+.dialog.show {
+    display: flex;
+}
+
+.dialog .dialog_box {
+    max-width: 420px;
+    width: 100%;
+    max-height: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: var(--section-divider-width) solid var(--section-divider-color);
+    border-radius: 4px;
+    color: #333;
+    pointer-events: all;
+}
+
+.dialog_box .dialog_header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+}
+
+.dialog_box .dialog_header .title {
+    width: 100%;
+    padding: 0 20px;
+    font-size: 1.15rem;
+}
+
+.dialog_box .dialog_header .close_btn {
+    width: 60px;
+    height: 60px;
+    padding: 12px;
+}
+
+.dialog_box .dialog_header svg {
+    width: 100%;
+    height: 100%;
+}
+
+.dialog_box .dialog_body {
+    width: 100%;
+    height: 100%;
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.dialog_box .dialog_body .input {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px;
+    position: relative;
+}
+
+.dialog_box .dialog_body .input input {
+    width: 100%;
+    height: 45px;
+    margin: 5px 0;
+    padding: 0px 10px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.dialog_box .dialog_body .input.shorturl {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.dialog_box .dialog_body .input.shorturl label {
+    width: 100%;
+}
+
+.dialog_box .dialog_body .input.shorturl span.input_prefix {
+    width: auto;
+    height: 45px;
+    margin: 5px 0;
+    padding: 0px 20px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    background: #f4f4f4;
+    color: #666;
+}
+
+.dialog_box .dialog_body .input.shorturl span.divider {
+    margin: 0 15px;
+    display: flex;
+    align-items: center;
+}
+
+.dialog_box .dialog_body .input.shorturl input {
+    width: auto;
+    min-width: fit-content;
+    flex: 1 1 auto;
+}
+
+
+.dialog_box .dialog_footer {
+    width: 100%;
+    min-height: 70px;
+    border-top: var(--section-divider-width) solid var(--section-divider-color);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.dialog_box .dialog_footer input {
+    height: 45px;
+    margin: 0 20px;
+    padding: 0 15px;
+    background: #07F;
+    color: white;
+    font-weight: bold;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
 }
 
 /* Screen Breakpoints */

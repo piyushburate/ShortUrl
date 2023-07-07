@@ -33,16 +33,6 @@
     </div>
 </div>
 <script>
-    var makeRequest = async (url, data) => {
-        let p = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        let response = await p.json()
-        return response
-    }
-
     var signup = async () => {
         var form_data = {
             name: $("#form_name").val(),
@@ -51,20 +41,24 @@
             password: $("#form_password").val()
         }
         var url = $(".form").attr("action")
-        var data = await makeRequest(url, form_data)
+        var data = await makePostRequest(url, form_data)
         console.log(data);
-        if (data.status == "ok") {
+        if (data.status) {
             var creds = {
                 username: data.username,
                 password: data.password
             }
             var url2 = "/authLogin"
-            let data2 = await makeRequest(url2, creds)
-            if (data.status == "error") {
-                alert("Error: " + data.error)
-            } else {
+            let data2 = await makePostRequest(url2, creds)
+            // console.log("error");
+            if (data2.status) {
+                alert(data.result)
                 window.location.reload()
+            } else {
+                alert("Error: " + data2.result)
             }
+        } else {
+            alert("Error: " + data.result)
         }
     }
 

@@ -48,19 +48,18 @@
             </a>
         </div>
     </div>
-    <div class="main">
+    <div id="main" class="main">
     </div>
 </div>
 <script>
     $(".sidebar_toggle").click(() => {
         $(".sidebar").addClass("show")
-        $(".cancel_bg").css("display", "block")
-        $(".cancel_bg").click(() => {
+        $("#cancel_bg").css("display", "block")
+        $("#cancel_bg").click(() => {
             $(".sidebar").removeClass("show")
-            $(".cancel_bg").css("display", "none")
-            $(".cancel_bg").click(null)
+            $("#cancel_bg").css("display", "none")
+            $("#cancel_bg").click(null)
         })
     })
-
     router("user")
 </script>

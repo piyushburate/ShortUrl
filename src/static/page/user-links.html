@@ -67,7 +67,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                 </svg>
-                <a href="" target="_blank">link</a>
+                <a href="#" target="_blank">link</a>
             </div>
             <div class="qr_section">
                 <div class="title">QR Code</div>
@@ -103,14 +103,44 @@
             </div>
         </div>
     </div>
+    <!-- Create New Dialog -->
+    <form action="/create_short_link" method="post">
+        <div class="dialog">
+            <div class="dialog_box">
+                <div class="dialog_header">
+                    <div class="title">Create new</div>
+                    <div class="close_btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="dialog_body">
+                    <div class="input longurl">
+                        <label for="form_longurl">Long URL</label>
+                        <input type="text" id="form_longurl" required>
+                    </div>
+                    <div class="input title">
+                        <label for="form_title">Title (optional)</label>
+                        <input type="text" id="form_title" required>
+                    </div>
+                    <div class="input shorturl">
+                        <label for="form_shorturl">Short URL code</label>
+                        <span class="input_prefix">short.url</span>
+                        <span class="divider">/</span>
+                        <input type="text" id="form_shorturl" size="1" required>
+                    </div>
+                </div>
+                <div class="dialog_footer">
+                    <input type="submit" value="Create">
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script>
-    var makeRequest = async url => {
-        let p = await fetch(url)
-        let response = await p.json()
-        return response
-    }
 
     var linkClick = async (link, id) => {
         $(".link").each((i, l) => {
@@ -124,36 +154,51 @@
             $(".link_overview .link_header svg").on("click", null)
         })
 
-        var data = await makeRequest("/api/db/0/links/" + id)
-        // console.log(data)
-        $(".link_details .title span").html(data[0].title)
-        $(".link_details .datetime_created span").html(data[0].datetime)
-        $(".link_overview .link_details .clicks span").html(data[0].clicks + " Engagements")
-        $(".link_overview .link_data .clicks span").html(data[0].clicks + " clicks")
-        $(".link_overview .short_url span").html("short.url/" + data[0].code)
-        $(".link_overview .long_url a").html(data[0].link)
-        $(".link_overview .long_url a").attr("href", data[0].link)
-        $(".link_overview .short_url .copy").on("click", () => {
-            var copy = $('<input>').val(window.location.host + "/" + data[0].code)
-            $("body").append(copy)
-            copy.select()
-            document.execCommand("copy")
-            document.activeElement.blur()
-            copy.remove()
-            $(".link_overview .short_url .copy").text("Copied!")
-            setTimeout(() => {
-                $(".link_overview .short_url .copy").text("Copy")
-            }, 3000);
-        })
+        var data = await makeRequest("/api/db/links/" + id)
+        if (!data.status) {
+            if (data.statusCode == 10) {
+                window.location.reload()
+            } else {
+                console.log("Error: " + data.result);
+            }
+        } else {
+            data = data.result
+            $(".link_details .title span").html(data[0].title)
+            $(".link_details .datetime_created span").html(data[0].datetime)
+            $(".link_overview .link_details .clicks span").html(data[0].clicks + " Engagements")
+            $(".link_overview .link_data .clicks span").html(data[0].clicks + " clicks")
+            $(".link_overview .short_url span").html("short.url/" + data[0].code)
+            $(".link_overview .long_url a").html(data[0].link)
+            $(".link_overview .long_url a").attr("href", data[0].link)
+            $(".link_overview .short_url .copy").on("click", () => {
+                var copy = $('<input>').val(window.location.host + "/" + data[0].code)
+                $("body").append(copy)
+                copy.select()
+                document.execCommand("copy")
+                document.activeElement.blur()
+                copy.remove()
+                $(".link_overview .short_url .copy").text("Copied!")
+                setTimeout(() => {
+                    $(".link_overview .short_url .copy").text("Copy")
+                }, 3000);
+            })
+        }
     }
 
 
     var loadLinks = async () => {
-        let data = await makeRequest("/api/db/0/links")
-        // console.log(data);
-        for (let i = 0; i < data.length; i++) {
-            var link =
-                `<div class="link">
+        let data = await makeRequest("/api/db/links")
+        if (!data.status) {
+            if (data.statusCode == 10) {
+                window.location.reload()
+            } else {
+                console.log("Error: " + data.result);
+            }
+        } else {
+            data = data.result
+            for (let i = 0; i < data.length; i++) {
+                var link =
+                    `<div class="link">
                     <span class="link_active ${data[i].link_active == 1}"></span>
                     <span class="date_created">${data[i].datetime}</span>
                     <span class="long_url">${data[i].link}</span>
@@ -167,11 +212,12 @@
                         <span>${data[i].clicks}</span>
                         </div>
                         </div>`
-            var linkElement = $(link)
-            linkElement.on("click", () => {
-                linkClick(linkElement, data[i].id)
-            })
-            $(".link_list").append(linkElement)
+                var linkElement = $(link)
+                linkElement.on("click", () => {
+                    linkClick(linkElement, data[i].id)
+                })
+                $(".link_list").append(linkElement)
+            }
         }
     }
 

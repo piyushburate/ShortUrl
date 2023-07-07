@@ -19,28 +19,18 @@
     </div>
 </div>
 <script>
-    var makeRequest = async (url, data) => {
-        let p = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-        let response = await p.json()
-        return response
-    }
-
     var login = async () => {
         var form_data = {
             username: $("#form_username").val(),
             password: $("#form_password").val()
         }
         var url = $(".form").attr("action")
-        var data = await makeRequest(url, form_data)
-        console.log(data);
-        if (data.status == "error") {
-            alert("Error: " + data.error)
-        } else {
+        var data = await makePostRequest(url, form_data)
+        if (data.status) {
+            alert(data.result)
             window.location.reload()
+        } else {
+            alert("Error: " + data.result)
         }
     }
 
