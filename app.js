@@ -67,8 +67,11 @@ app.get("/user/*", (req, res) => {
     if (!req.session.loggedin) {
         res.redirect("/login")
         res.end()
-    } else if (req.url.split("/", 3)[2] != req.session.username) throw error404
-    res.sendFile(path.resolve(__dirname, "src", "index.html"))
+    } else if (req.url.split("/", 3)[2] != req.session.username) {
+        throw error404
+    } else {
+        res.sendFile(path.resolve(__dirname, "src", "index.html"))
+    }
 })
 
 app.get("/login", (req, res) => {
@@ -94,22 +97,6 @@ app.get("/logout", (req, res) => {
     res.redirect("/login")
 })
 
-app.get("/:link_code", (req, res) => {
-    var query = `SELECT link FROM links WHERE code = '${req.params.link_code}' AND link_active = TRUE`
-    database.query(query, (err, rows) => {
-        if (err || rows.length == 0) {
-            res.send("404 NOT FOUND <script>console.log(" + err + ")</script>")
-        } else {
-            database.query("UPDATE links SET clicks = clicks + 1", (err2, rows2) => {
-                if (err2) {
-                    res.send("Error <script>console.log(" + err2 + ")</script>")
-                } else {
-                    res.redirect(rows[0].link)
-                }
-            })
-        }
-    })
-})
 
 // POST requests
 app.post("/authLogin", (req, res) => {
@@ -178,8 +165,32 @@ app.post("/authSignup", (req, res) => {
     })
 })
 
+app.use((req, res, next) => {
+    if (req.originalUrl.includes('favicon.ico')) {
+        res.status(204).end()
+    }
+    next()
+})
+
+app.get("/:link_code", async (req, res) => {
+    var query = `SELECT link FROM links WHERE code = '${req.params.link_code}' AND link_active = TRUE`
+    database.query(query, (err, rows) => {
+        if (err || rows.length == 0) {
+            res.send("404 NOT FOUND <script>console.log(" + err + ")</script>")
+        } else {
+            res.redirect(rows[0].link)
+            database.query("UPDATE links SET clicks = clicks + 1 WHERE code = ?", [req.params.link_code], (err2, rows2) => {
+                if (err2) {
+                    res.send("Error <script>console.log(" + err2 + ")</script>")
+                } else {
+                }
+            })
+        }
+    })
+})
 // Application Entry Point
 app.use("/", (req, res) => {
+    console.log(req.url);
     if (req.session.loggedin == true) {
         res.redirect("/user/" + req.session.username)
     } else {
