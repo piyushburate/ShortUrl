@@ -13,7 +13,7 @@
             <button id="create_new_btn">Create new</button>
         </div>
         <div class="menu">
-            <a href="overview" class="menuitem overview" data-link-user>
+            <a href="overview" class="menuitem overview" data-link="user">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="icon">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -21,7 +21,7 @@
                 </svg>
                 <span class="title">Overview</span>
             </a>
-            <a href="links" class="menuitem links" data-link-user>
+            <a href="links" class="menuitem links" data-link="user">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="icon">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -50,8 +50,45 @@
     </div>
     <div id="main" class="main">
     </div>
+
+    <!-- Create New Dialog -->
+    <form id="create_new_form" action="/createShortLink" method="post">
+        <div id="create_new_dialog" class="dialog">
+            <div class="dialog_box">
+                <div class="dialog_header">
+                    <div class="title">Create new</div>
+                    <div class="close_btn" onclick="$('#cancel_bg').trigger('click')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="dialog_body">
+                    <div class="input longurl">
+                        <label for="form_longurl">Long URL</label>
+                        <input type="url" id="form_longurl" required>
+                    </div>
+                    <div class="input title">
+                        <label for="form_title">Title (optional)</label>
+                        <input type="text" id="form_title" required>
+                    </div>
+                    <div class="input shorturl">
+                        <label for="form_shorturl">Short URL code</label>
+                        <span class="input_prefix">short.url</span>
+                        <span class="divider">/</span>
+                        <input type="text" id="form_shorturl" size="1" minlength="4" required>
+                    </div>
+                </div>
+                <div class="dialog_footer">
+                    <input type="submit" value="Create">
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 <script>
+    router("user")
     $(".sidebar_toggle").click(() => {
         $(".sidebar").addClass("show")
         $("#cancel_bg").css("display", "block")
@@ -61,5 +98,45 @@
             $("#cancel_bg").click(null)
         })
     })
-    router("user")
+    
+    $("#create_new_btn").on("click", ()=>{
+        $("#create_new_form").trigger("reset")
+        $("#cancel_bg").trigger("click")
+        $("#create_new_dialog").addClass("show")
+        $("#form_longurl").trigger("focus")
+        $("#cancel_bg").css("display", "block")
+        $("#cancel_bg").click(() => {
+            $("#create_new_dialog").removeClass("show")
+            $("#cancel_bg").css("display", "none")
+            $("#cancel_bg").click(null)
+        })
+    })
+    
+    $("#create_new_form").on("submit", async (e) =>{
+        e.preventDefault()
+        let longurl = $("#form_longurl").val()
+        let title = $("#form_title").val()
+        let shorturl = $("#form_shorturl").val()
+        let form_data = {
+            longurl:longurl,
+            shorturl: shorturl,
+            title: title
+        }
+        let url = "/createShortLink"
+        let req = await makePostRequest(url, form_data)
+        if(req.status){
+            alert(req.result)
+            $("#cancel_bg").trigger("click")
+            router("user")
+        } else if(req.statusCode == 10){
+            alert(req.result)
+            window.location.reload()
+        } else {
+            alert(res.result)
+        }
+    })
+
+    let createLink = async ()=>{
+
+    }
 </script>

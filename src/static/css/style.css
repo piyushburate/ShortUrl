@@ -609,19 +609,20 @@ a[data-link]:hover {
     width: 100vw;
     height: 100vh;
     position: fixed;
-    top: 0;
+    top: -100%;
     left: 0;
     pointer-events: none;
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: start;
     z-index: 30;
     padding: 50px 0;
     overflow: hidden;
+    transition: all 0.2s ease-out;
 }
 
 .dialog.show {
-    display: flex;
+    top: 0;
 }
 
 .dialog .dialog_box {
@@ -636,6 +637,7 @@ a[data-link]:hover {
     border-radius: 4px;
     color: #333;
     pointer-events: all;
+    overflow: hidden;
 }
 
 .dialog_box .dialog_header {
@@ -657,6 +659,7 @@ a[data-link]:hover {
     width: 60px;
     height: 60px;
     padding: 12px;
+    cursor: pointer;
 }
 
 .dialog_box .dialog_header svg {
@@ -747,6 +750,7 @@ a[data-link]:hover {
     font-weight: bold;
     border: 1.5px solid #ccc;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 /* Screen Breakpoints */
@@ -842,5 +846,15 @@ a[data-link]:hover {
     .main .links_container .link_overview .link_data {
         margin: 10px;
         padding: 20px;
+    }
+
+    .dialog {
+        height: 100%;
+        padding: 0;
+    }
+    .dialog .dialog_box {
+        max-height: 100vh;
+        height: 100%;
+        flex: 1 1 100%;
     }
 }

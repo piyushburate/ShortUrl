@@ -41,13 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
     $("body").on("click", e => {
         if (e.target.matches("[data-link]")) {
             e.preventDefault()
-            goTo(e.target.href)
+            goTo(e.target.href, e.target.getAttribute("data-link"))
         }
 
-        if (e.target.matches("[data-link-user]")) {
-            e.preventDefault()
-            goTo(e.target.href, "user")
-        }
+        // if (e.target.matches("[data-link-user]")) {
+        //     e.preventDefault()
+        //     goTo(e.target.href, "user")
+        // }
     })
 
     router()

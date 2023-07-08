@@ -67,7 +67,7 @@ app.get("/api/db/links/:id", async (req, res) => {
             result: "Login required to get database data."
         })
     } else {
-        var query = `SELECT title, code, link, DATE_FORMAT(datetime, '%b %e, %Y') AS 'datetime', clicks, link_active FROM links WHERE uid = ${req.session.uid}`
+        var query = `SELECT title, code, link, DATE_FORMAT(datetime, '%b %e, %Y') AS 'datetime', clicks, link_active FROM links WHERE uid = ${req.session.uid} && id = ${req.params.id}`
         let data = await databaseRequest(query)
         res.send({
             status: data.status,
@@ -108,7 +108,6 @@ app.get("/api/session/:data", (req, res) => {
 // GET requests
 app.get("/user", async (req, res) => {
     if (req.session.loggedin) {
-        // res.sendFile(path.resolve(__dirname, "src", "index.html"))
         res.redirect("/user/" + req.session.username)
     } else {
         res.redirect("/login")
@@ -117,7 +116,6 @@ app.get("/user", async (req, res) => {
 app.get("/user/:username", (req, res) => {
     if (req.session.loggedin) {
         if (req.session.username == req.params.username) {
-            // res.sendFile(path.resolve(__dirname, "src", "index.html"))
             res.redirect("/user/" + req.session.username + "/overview")
         } else {
             res.redirect("/error")
@@ -171,7 +169,6 @@ app.post("/authLogin", async (req, res) => {
     let data = await databaseRequest(query)
     if (data.status) {
         if (data.result.length == 1) {
-            console.log("login");
             req.session.loggedin = true
             req.session.username = data.result[0].username
             req.session.email = data.result[0].email
@@ -200,17 +197,48 @@ app.post("/authSignup", async (req, res) => {
             var query2 = `INSERT INTO users (username, name, email, password) VALUES ('${username}', '${name}', '${email}', '${password}')`
             let data2 = await databaseRequest(query2)
             if (data2.status) {
-                res.send({status:true, statusCode:100, result:"Signup successful!", username: username, password: password})
+                res.send({ status: true, statusCode: 100, result: "Signup successful!", username: username, password: password })
             } else {
                 res.send(data2)
             }
-        } else if(data.result.length == 1){
-            res.send({status:false, statusCode: statusCodes.ERROR, result: "Username already taken!"})
+        } else if (data.result.length == 1) {
+            res.send({ status: false, statusCode: statusCodes.ERROR, result: "Username already taken!" })
         } else {
-            res.send({status:false, statusCode: statusCodes.ERROR, result: "An internal error occured! Please try again"})
+            res.send({ status: false, statusCode: statusCodes.ERROR, result: "An internal error occured! Please try again" })
         }
     } else {
         res.send(data)
+    }
+})
+
+app.post("/createShortLink", async (req, res) => {
+    if (!req.session.loggedin) {
+        res.send({
+            status: false,
+            statusCode: statusCodes.AUTH_ERORR,
+            result: "Login required to get database data."
+        })
+    } else {
+        const { longurl, shorturl, title } = req.body
+        var query = `SELECT * FROM links WHERE code = '${shorturl}'`
+        let data = await databaseRequest(query)
+        if (data.status) {
+            if (data.result.length == 0) {
+                var query2 = `INSERT INTO links (code, link, uid, title) VALUES ('${shorturl}', '${longurl}', '${req.session.uid}', '${title}')`
+                let data2 = await databaseRequest(query2)
+                if (data2.status) {
+                    res.send({ status: true, statusCode: 100, result: "Short link created successfully!" })
+                } else {
+                    res.send(data2)
+                }
+            } else if (data.result.length == 1) {
+                res.send({ status: false, statusCode: statusCodes.ERROR, result: "Short URL code already taken!" })
+            } else {
+                res.send({ status: false, statusCode: statusCodes.ERROR, result: "An internal error occured! Please try again" })
+            }
+        } else {
+            res.send(data)
+        }
     }
 })
 
@@ -221,8 +249,13 @@ app.use("/error", (req, res) => {
 app.get("/:link_code", async (req, res) => {
     var query = `SELECT link FROM links WHERE code = '${req.params.link_code}' AND link_active = TRUE`
     let data = await databaseRequest(query)
-    if(data.status){
-        if(data.result.length == 1){
+    if (data.status) {
+        if (data.result.length == 1) {
+            var query2 = `UPDATE links SET clicks = clicks + 1 WHERE code = '${req.params.link_code}'`
+            let data2 = await databaseRequest(query2)
+            if (!data2.status) {
+                console.log(data2.result);
+            }
             res.redirect(data.result[0].link)
         } else {
             res.redirect("/error")

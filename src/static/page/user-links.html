@@ -29,7 +29,7 @@
         <div class="link_details">
             <div class="title">
                 <span>Study Drive Folder</span>
-                <button class="edit">Edit</button>
+                <button id="edit_link_btn" class="edit">Edit</button>
             </div>
             <div class="datetime_created">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -103,41 +103,6 @@
             </div>
         </div>
     </div>
-    <!-- Create New Dialog -->
-    <form action="/create_short_link" method="post">
-        <div class="dialog">
-            <div class="dialog_box">
-                <div class="dialog_header">
-                    <div class="title">Create new</div>
-                    <div class="close_btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="dialog_body">
-                    <div class="input longurl">
-                        <label for="form_longurl">Long URL</label>
-                        <input type="text" id="form_longurl" required>
-                    </div>
-                    <div class="input title">
-                        <label for="form_title">Title (optional)</label>
-                        <input type="text" id="form_title" required>
-                    </div>
-                    <div class="input shorturl">
-                        <label for="form_shorturl">Short URL code</label>
-                        <span class="input_prefix">short.url</span>
-                        <span class="divider">/</span>
-                        <input type="text" id="form_shorturl" size="1" required>
-                    </div>
-                </div>
-                <div class="dialog_footer">
-                    <input type="submit" value="Create">
-                </div>
-            </div>
-        </div>
-    </form>
 </div>
 
 <script>
@@ -192,34 +157,44 @@
             if (data.statusCode == 10) {
                 window.location.reload()
             } else {
-                console.log("Error: " + data.result);
+                console.log(data.result);
             }
         } else {
             data = data.result
             for (let i = 0; i < data.length; i++) {
                 var link =
-                    `<div class="link">
-                    <span class="link_active ${data[i].link_active == 1}"></span>
-                    <span class="date_created">${data[i].datetime}</span>
-                    <span class="long_url">${data[i].link}</span>
-                    <span class="short_url">short.url/${data[i].code}</span>
-                    <div class="clicks">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                        </svg>
-                        <span>${data[i].clicks}</span>
+                    `<div class="link" data-code="${data[i].code}">
+                        <span class="link_active ${data[i].link_active == 1}"></span>
+                        <span class="date_created">${data[i].datetime}</span>
+                        <span class="long_url">${data[i].link}</span>
+                        <span class="short_url">short.url/${data[i].code}</span>
+                        <div class="clicks">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                            </svg>
+                            <span>${data[i].clicks}</span>
                         </div>
-                        </div>`
-                var linkElement = $(link)
-                linkElement.on("click", () => {
+                    </div>`
+                let linkElement = $(link)
+                linkElement.on("click", (e) => {
                     linkClick(linkElement, data[i].id)
                 })
                 $(".link_list").append(linkElement)
             }
+            if ($(".link").first().length != 0) {
+                $(".link").first()[0].click()
+            }
         }
     }
-
+    
+    
+    
+    $("#edit_link_btn").on("click", async ()=>{
+        // $(".dialog_box .dialog_header .title").text("")
+        $("#create_new_btn").trigger("click")
+    })
     loadLinks()
+    
 </script>
