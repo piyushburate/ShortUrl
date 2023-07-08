@@ -70,18 +70,22 @@
                         <input type="url" id="form_longurl" required>
                     </div>
                     <div class="input title">
-                        <label for="form_title">Title (optional)</label>
+                        <label for="form_title">Title</label>
                         <input type="text" id="form_title" required>
                     </div>
                     <div class="input shorturl">
                         <label for="form_shorturl">Short URL code</label>
                         <span class="input_prefix">short.url</span>
                         <span class="divider">/</span>
-                        <input type="text" id="form_shorturl" size="1" minlength="4" required>
+                        <input type="text" id="form_shorturl" size="1" minlength="4" pattern="[a-zA-Z][a-zA-Z0-9\s]*" required>
+                    </div>
+                    <div class="linkactive">
+                        <label for="form_linkactive">Link Active</label>
+                        <input type="checkbox" id="form_linkactive" checked=true>
                     </div>
                 </div>
                 <div class="dialog_footer">
-                    <input type="submit" value="Create">
+                    <input type="submit" id="form_submit" value="Create">
                 </div>
             </div>
         </div>
@@ -98,8 +102,9 @@
             $("#cancel_bg").click(null)
         })
     })
-    
-    $("#create_new_btn").on("click", ()=>{
+
+
+    var openLinkDialog = async () => {
         $("#create_new_form").trigger("reset")
         $("#cancel_bg").trigger("click")
         $("#create_new_dialog").addClass("show")
@@ -110,33 +115,41 @@
             $("#cancel_bg").css("display", "none")
             $("#cancel_bg").click(null)
         })
+    }
+    $("#create_new_btn").on("click", () => {
+        openLinkDialog()
+        $("#create_new_form").attr("action", "/createShortLink")
+        $(".dialog_box .dialog_header .title").text("Create new")
+        $(".dialog_box .dialog_body #form_shorturl").attr("disabled", false)
+        $(".dialog_box .dialog_body .linkactive").css("display", "none")
+        $(".dialog_box .dialog_body #form_linkactive").attr("checked", true)
+        $(".dialog_box .dialog_footer #form_submit").val("Create")
     })
-    
-    $("#create_new_form").on("submit", async (e) =>{
+
+
+    $("#create_new_form").on("submit", async (e) => {
         e.preventDefault()
         let longurl = $("#form_longurl").val()
         let title = $("#form_title").val()
         let shorturl = $("#form_shorturl").val()
+        let link_active = $("#form_linkactive").is(":checked")
         let form_data = {
-            longurl:longurl,
+            longurl: longurl,
             shorturl: shorturl,
-            title: title
+            title: title,
+            link_active: link_active
         }
-        let url = "/createShortLink"
+        let url = $("#create_new_form").attr("action")
         let req = await makePostRequest(url, form_data)
-        if(req.status){
+        if (req.status) {
             alert(req.result)
             $("#cancel_bg").trigger("click")
             router("user")
-        } else if(req.statusCode == 10){
+        } else if (req.statusCode == 10) {
             alert(req.result)
             window.location.reload()
         } else {
-            alert(res.result)
+            alert(req.result)
         }
     })
-
-    let createLink = async ()=>{
-
-    }
 </script>

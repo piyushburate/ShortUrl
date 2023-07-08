@@ -242,6 +242,35 @@ app.post("/createShortLink", async (req, res) => {
     }
 })
 
+app.post("/updateShortLink", async (req, res) => {
+    if (!req.session.loggedin) {
+        res.send({
+            status: false,
+            statusCode: statusCodes.AUTH_ERORR,
+            result: "Login required to get database data."
+        })
+    } else {
+        const { longurl, shorturl, title, link_active } = req.body
+        var query = `SELECT * FROM links WHERE code = '${shorturl}' && uid = ${req.session.uid}`
+        let data = await databaseRequest(query)
+        if (data.status) {
+            if (data.result.length == 1) {
+                var query2 = `UPDATE links SET code = '${shorturl}', link = '${longurl}', title = '${title}', link_active = ${link_active} WHERE code = '${shorturl}' && uid = ${req.session.uid}`
+                let data2 = await databaseRequest(query2)
+                if (data2.status) {
+                    res.send({ status: true, statusCode: 100, result: "Short link updated successfully!" })
+                } else {
+                    res.send(data2)
+                }
+            } else {
+                res.send({ status: false, statusCode: statusCodes.ERROR, result: "An internal error occured! Please try again" })
+            }
+        } else {
+            res.send(data)
+        }
+    }
+})
+
 app.use("/error", (req, res) => {
     res.sendFile(path.resolve(__dirname, "src", "index.html"))
 })

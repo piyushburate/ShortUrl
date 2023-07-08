@@ -731,6 +731,52 @@ a[data-link]:hover {
     flex: 1 1 auto;
 }
 
+.dialog_box .dialog_body .linkactive {
+    margin: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dialog_box .dialog_body .linkactive label {
+    margin-right: 15px;
+}
+
+.dialog_box .dialog_body .linkactive input {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 50px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #D9DADC;
+    border-radius: 50px;
+    box-shadow: inset -20px 0 0 0 #fff;
+    transition: all 0.05s linear;
+}
+
+.dialog_box .dialog_body .linkactive input::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background: transparent;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s linear;
+}
+
+.dialog_box .dialog_body .linkactive input:checked {
+    box-shadow: inset 20px 0 0 0 #4ed164;
+    border-color: #4ed164;
+}
+
+.dialog_box .dialog_body .linkactive input:checked::after {
+    left: 20px;
+    box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
+}
 
 .dialog_box .dialog_footer {
     width: 100%;
@@ -852,7 +898,9 @@ a[data-link]:hover {
         height: 100%;
         padding: 0;
     }
+
     .dialog .dialog_box {
+        max-width: 100% !important;
         max-height: 100vh;
         height: 100%;
         flex: 1 1 100%;
