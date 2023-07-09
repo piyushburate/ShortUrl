@@ -2,7 +2,9 @@
     <div class="title">Links</div>
     <div class="link_list">
         <div class="title">Overview</div>
-        <div class="link_list_container"></div>
+        <div class="link_list_container">
+            <div class="link_list_placeholder">No Links Found</div>
+        </div>
         <!-- Sample Link -->
         <!-- <div class="link" data-id="id" data-code="code">
             <span class="link_active"></span>
@@ -19,7 +21,7 @@
             </div>
         </div> -->
     </div>
-    <div class="link_overview">
+    <div class="link_info">
         <div class="link_header">
             <span class="title">Link Overview</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -113,11 +115,11 @@
             $(l).removeClass("active")
         })
         $(link).addClass("active")
-        $(".link_overview").addClass("active")
-        $(".link_overview .link_header svg").on("click", () => {
+        $(".link_info").addClass("active")
+        $(".link_info .link_header svg").on("click", () => {
             $(link).removeClass("active")
-            $(".link_overview").removeClass("active")
-            $(".link_overview .link_header svg").on("click", null)
+            $(".link_info").removeClass("active")
+            $(".link_info .link_header svg").on("click", null)
             let url = window.location.origin + window.location.pathname
             window.history.replaceState(null, null, url)
         })
@@ -133,21 +135,21 @@
             data = data.result
             $(".link_details .title span").html(data[0].title)
             $(".link_details .datetime_created span").html(data[0].datetime)
-            $(".link_overview .link_details .clicks span").html(data[0].clicks + " Engagements")
-            $(".link_overview .link_data .clicks span").html(data[0].clicks + " clicks")
-            $(".link_overview .short_url span").html("short.url/" + data[0].code)
-            $(".link_overview .long_url a").html(data[0].link)
-            $(".link_overview .long_url a").attr("href", data[0].link)
-            $(".link_overview .short_url .copy").on("click", () => {
+            $(".link_info .link_details .clicks span").html(data[0].clicks + " Engagements")
+            $(".link_info .link_data .clicks span").html(data[0].clicks + " clicks")
+            $(".link_info .short_url span").html("short.url/" + data[0].code)
+            $(".link_info .long_url a").html(data[0].link)
+            $(".link_info .long_url a").attr("href", data[0].link)
+            $(".link_info .short_url .copy").on("click", () => {
                 var copy = $('<input>').val(window.location.host + "/" + data[0].code)
                 $("body").append(copy)
                 copy.select()
                 document.execCommand("copy")
                 document.activeElement.blur()
                 copy.remove()
-                $(".link_overview .short_url .copy").text("Copied!")
+                $(".link_info .short_url .copy").text("Copied!")
                 setTimeout(() => {
-                    $(".link_overview .short_url .copy").text("Copy")
+                    $(".link_info .short_url .copy").text("Copy")
                 }, 3000);
             })
             let url = window.location.origin + window.location.pathname + "?code=" + data[0].code
@@ -168,7 +170,6 @@
         })
     }
     var loadLinks = async () => {
-        $(".link_list .link_list_container").html("")
         let data = await makeRequest("/api/db/links")
         if (!data.status) {
             if (data.statusCode == 10) {
@@ -178,6 +179,7 @@
             }
         } else {
             data = sortLinkList(sessionStorage.sortLinkListBy, data.result)
+            if(data.length > 0) $(".link_list .link_list_container").html("")
             for (let i = 0; i < data.length; i++) {
                 var link =
                     `<div class="link" data-id="${data[i].id}" data-code="${data[i].code}">

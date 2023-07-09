@@ -72,17 +72,13 @@
                     </div>
                     <div class="input title">
                         <label for="form_title">Title</label>
-                        <input type="text" id="form_title" pattern="[a-zA-Z0-9_-\s]*" required>
-                        <!-- <span class="hint hint_empty">* Required.</span> -->
-                        <!-- <span class="hint">* Special characters not allowed.</span> -->
+                        <input type="text" id="form_title" pattern="[a-zA-Z0-9\s]+[-_,]*\.*" title="Only - _ , . special characters are allowed." required>
                     </div>
                     <div class="input shorturl">
                         <label for="form_shorturl">Short URL code</label>
                         <span class="input_prefix">short.url</span>
                         <span class="divider">/</span>
-                        <input type="text" id="form_shorturl" size="1" pattern="[a-zA-Z0-9_-]*" required>
-                        <!-- <span class="hint hint_empty">* Required.</span> -->
-                        <!-- <span class="hint">* Special characters and spaces not allowed.</span> -->
+                        <input type="text" id="form_shorturl" size="1" pattern="[a-zA-Z0-9]+[-_]*" title="Only - _ special characters are allowed." required>
                     </div>
                     <div class="linkactive">
                         <label for="form_linkactive">Link Active</label>
@@ -109,20 +105,23 @@
     })
 
 
-    var openLinkDialog = async () => {
+    var openLinkDialog = () => {
         $("#create_new_form").trigger("reset")
         $("#cancel_bg").trigger("click")
         $("#create_new_dialog").addClass("show")
-        $("#form_longurl").trigger("focus")
         $("#cancel_bg").css("display", "block")
         $("#cancel_bg").click(() => {
             $("#create_new_dialog").removeClass("show")
             $("#cancel_bg").css("display", "none")
             $("#cancel_bg").click(null)
+            $("#create_new_form").trigger("reset")
         })
     }
     $("#create_new_btn").on("click", () => {
         openLinkDialog()
+        if (!/Mobile/g.test(window.navigator.userAgent)) {
+            $("#form_longurl").trigger("focus")
+        }
         $("#create_new_form").attr("action", "/createShortLink")
         $(".dialog_box .dialog_header .title").text("Create new")
         $(".dialog_box .dialog_body #form_shorturl").attr("disabled", false)

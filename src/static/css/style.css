@@ -41,7 +41,6 @@ a:hover {
     text-decoration: underline;
 }
 
-a[data-link-user]:hover,
 a[data-link]:hover {
     color: unset;
     text-decoration: none;
@@ -272,9 +271,154 @@ a[data-link]:hover {
 }
 
 .dashboard .main {
+    height: calc(100vh - 60px);
+    overflow: hidden;
     background: white;
     grid-area: main;
 }
+
+.main .overview_container {
+    width: 100%;
+    height: 100%;
+    background: #f4f6fa;
+    display: grid;
+    grid-template-areas:
+        'view perf'
+        'last perf';
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 32% 1fr;
+    column-gap: 25px;
+    row-gap: 25px;
+    padding: 25px;
+}
+
+.main .overview_container .links_overview {
+    grid-area: view;
+    border-radius: 6px;
+    overflow: auto;
+    background: white;
+    padding-bottom: 10px;
+    box-shadow: 0 4px 10px #ddd;
+
+}
+
+.main .overview_container .links_overview .title {
+    width: 100%;
+    font-size: 1.2rem;
+    color: #555;
+    padding: 10px 20px;
+    position: relative;
+    border-bottom: 2px solid #f9f9f9;
+}
+
+.main .overview_container .links_overview .item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 0 20px;
+    color: #333;
+}
+
+.main .overview_container .links_overview .item svg {
+    width: 33px;
+    height: 33px;
+    padding: 8px;
+    background: white;
+    box-shadow: 0 0 12px #ddd;
+    margin-right: 20px;
+    border-radius: 12px;
+    color: white;
+}
+
+.main .overview_container .links_overview .links_total svg {
+    background: #07f;
+}
+
+.main .overview_container .links_overview .links_active svg {
+    background: #0a0;
+}
+
+.main .overview_container .links_overview .links_deactivated svg {
+    background: #f04;
+}
+
+.main .overview_container .links_overview .links_qrenabled svg {
+    background: rgb(0, 170, 162);
+}
+
+.main .overview_container .links_overview .item span.label {
+    flex: 1 1 auto;
+}
+
+.main .overview_container .links_overview .item span.count {
+    margin: 0 20px;
+}
+
+.main .overview_container .last_created_links {
+    grid-area: last;
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 10px #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.main .overview_container .last_created_links .title,
+.main .overview_container .last_created_links .view_all_links {
+    width: 100%;
+    padding: 10px 20px;
+    color: #555;
+    font-size: 1rem;
+    text-align: right;
+    border-top: 1.5px solid #eee;
+}
+
+.main .overview_container .last_created_links .title {
+    border-bottom: 1.5px solid #eee;
+}
+
+.main .overview_container .last_created_links .view_all_links:hover {
+    cursor: pointer;
+    background: #f9f9f9;
+}
+
+.main .overview_container .last_created_links .links_container {
+    flex: 1 1 auto;
+    background: white;
+    overflow: auto;
+}
+
+.main .overview_container .last_created_links .links_container .link_list {
+    width: 100%;
+    height: fit-content !important;
+    border: none;
+}
+
+.main .overview_container .last_created_links .links_container .link_list .title {
+    cursor: unset;
+    border-color: #eee;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.main .overview_container .last_created_links .links_container .link_list .link {
+    border-color: #eee;
+}
+
+.main .overview_container .last_created_links .links_container .link_list .link:hover {
+    background: #f9f9f9;
+}
+
+.main .overview_container .links_performance_overview {
+    grid-area: perf;
+    border-radius: 6px;
+    overflow: auto;
+    background: white;
+    box-shadow: 0 4px 10px #ddd;
+}
+
 
 .main .links_container {
     width: 100%;
@@ -300,7 +444,6 @@ a[data-link]:hover {
 .main .links_container .link_list {
     width: 30%;
     height: calc(100% - 80px) !important;
-    height: min-content;
     border-right: var(--section-divider-width) solid var(--section-divider-color);
     overflow: auto;
     display: flex;
@@ -315,6 +458,13 @@ a[data-link]:hover {
     text-align: right;
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
     cursor: pointer;
+}
+
+.main .links_container .link_list .link_list_placeholder {
+    width: 100%;
+    text-align: center;
+    padding-top: 50px;
+    color: #888;
 }
 
 .main .links_container .link_list .link {
@@ -399,7 +549,7 @@ a[data-link]:hover {
     height: 17px;
 }
 
-.main .links_container .link_overview {
+.main .links_container .link_info {
     width: 70%;
     height: calc(100% - 80px) !important;
     overflow: auto;
@@ -408,11 +558,11 @@ a[data-link]:hover {
     background: #f4f6fa;
 }
 
-.main .links_container .link_overview.active {
+.main .links_container .link_info.active {
     display: flex;
 }
 
-.main .links_container .link_overview .link_header {
+.main .links_container .link_info .link_header {
     width: 100%;
     height: 60px;
     background: white;
@@ -422,7 +572,7 @@ a[data-link]:hover {
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
 }
 
-.main .links_container .link_overview .link_header .title {
+.main .links_container .link_info .link_header .title {
     flex: 1 1 auto;
     font-size: 1.5rem;
     padding: 0 8px;
@@ -430,7 +580,7 @@ a[data-link]:hover {
     text-overflow: ellipsis;
 }
 
-.main .links_container .link_overview .link_header svg {
+.main .links_container .link_info .link_header svg {
     width: 50px;
     height: 50px;
     padding: 6px;
@@ -439,12 +589,12 @@ a[data-link]:hover {
     color: #555;
 }
 
-.main .links_container .link_overview .link_header svg:hover {
+.main .links_container .link_info .link_header svg:hover {
     background: #f0f0f0;
     color: black;
 }
 
-.main .links_container .link_overview .link_details {
+.main .links_container .link_info .link_details {
     width: auto;
     height: max-content !important;
     background: white;
@@ -453,7 +603,7 @@ a[data-link]:hover {
     border-radius: 8px;
 }
 
-.main .links_container .link_overview .link_data {
+.main .links_container .link_info .link_data {
     width: auto;
     height: max-content !important;
     background: white;
@@ -463,15 +613,15 @@ a[data-link]:hover {
     border-radius: 8px;
 }
 
-.main .links_container .link_overview .link_details .title,
-.main .links_container .link_overview .link_data .short_url {
+.main .links_container .link_info .link_details .title,
+.main .links_container .link_info .link_data .short_url {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.main .links_container .link_overview .link_details .title span,
-.main .links_container .link_overview .link_data .short_url span {
+.main .links_container .link_info .link_details .title span,
+.main .links_container .link_info .link_data .short_url span {
     width: 100%;
     font-size: 1.5rem;
     color: #333;
@@ -482,8 +632,8 @@ a[data-link]:hover {
     text-overflow: ellipsis;
 }
 
-.main .links_container .link_overview .link_details .title button.edit,
-.main .links_container .link_overview .link_data .short_url button.copy {
+.main .links_container .link_info .link_details .title button.edit,
+.main .links_container .link_info .link_data .short_url button.copy {
     height: 40px;
     padding: 10px 20px;
     border: 1.5px solid #ccc;
@@ -494,14 +644,14 @@ a[data-link]:hover {
     cursor: pointer;
 }
 
-.main .links_container .link_overview .link_details .title button.edit:hover,
-.main .links_container .link_overview .link_data .short_url button.copy:hover {
+.main .links_container .link_info .link_details .title button.edit:hover,
+.main .links_container .link_info .link_data .short_url button.copy:hover {
     background: #f4f4f4;
     color: #111;
 }
 
-.main .links_container .link_overview .link_details .datetime_created,
-.main .links_container .link_overview .link_data .clicks {
+.main .links_container .link_info .link_details .datetime_created,
+.main .links_container .link_info .link_data .clicks {
     width: 100%;
     display: flex;
     align-items: center;
@@ -509,23 +659,23 @@ a[data-link]:hover {
     color: #333;
 }
 
-.main .links_container .link_overview .link_details .datetime_created svg,
-.main .links_container .link_overview .link_data .clicks svg {
+.main .links_container .link_info .link_details .datetime_created svg,
+.main .links_container .link_info .link_data .clicks svg {
     width: 20px;
     height: 20px;
     margin-right: 5px;
 }
 
-.main .links_container .link_overview .link_details .datetime_created span,
-.main .links_container .link_overview .link_data .clicks span {
+.main .links_container .link_info .link_details .datetime_created span,
+.main .links_container .link_info .link_data .clicks span {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.main .links_container .link_overview .link_details .clicks,
-.main .links_container .link_overview .link_data .long_url {
+.main .links_container .link_info .link_details .clicks,
+.main .links_container .link_info .link_data .long_url {
     width: 100%;
     display: flex;
     align-items: center;
@@ -533,29 +683,29 @@ a[data-link]:hover {
     color: #333;
 }
 
-.main .links_container .link_overview .link_details .clicks svg,
-.main .links_container .link_overview .link_data .long_url svg {
+.main .links_container .link_info .link_details .clicks svg,
+.main .links_container .link_info .link_data .long_url svg {
     width: 17px;
     height: 17px;
     margin-right: 5px;
 }
 
-.main .links_container .link_overview .link_details .clicks span,
-.main .links_container .link_overview .link_data .long_url a {
+.main .links_container .link_info .link_details .clicks span,
+.main .links_container .link_info .link_data .long_url a {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.main .links_container .link_overview .link_data .qr_section {
+.main .links_container .link_info .link_data .qr_section {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     margin-top: 15px;
 }
 
-.main .links_container .link_overview .link_data .qr_section .title {
+.main .links_container .link_info .link_data .qr_section .title {
     width: 100%;
     font-size: 1.2rem;
     color: #444;
@@ -563,26 +713,26 @@ a[data-link]:hover {
     margin-bottom: 10px;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_code {
+.main .links_container .link_info .link_data .qr_section .qr_code {
     width: fit-content;
     display: flex;
     margin: 0 20px 15px 0;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_code img {
+.main .links_container .link_info .link_data .qr_section .qr_code img {
     width: 130px;
     height: 130px;
     background: #000;
     opacity: 0.7;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_actions {
+.main .links_container .link_info .link_data .qr_section .qr_actions {
     width: auto;
     display: flex;
     flex-direction: column;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_actions button {
+.main .links_container .link_info .link_data .qr_section .qr_actions button {
     padding: 10px 20px;
     margin-bottom: 5px;
     background: white;
@@ -595,12 +745,12 @@ a[data-link]:hover {
     transition: all 0.15s ease-in-out;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_actions button:hover {
+.main .links_container .link_info .link_data .qr_section .qr_actions button:hover {
     background: #f4f4f4;
     color: #222;
 }
 
-.main .links_container .link_overview .link_data .qr_section .qr_actions button svg {
+.main .links_container .link_info .link_data .qr_section .qr_actions button svg {
     width: 20px;
     height: 20px;
     margin-right: 10px;
@@ -695,18 +845,6 @@ a[data-link]:hover {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-/* .dialog_box .dialog_body .input span.hint {
-    display: none;
-    font-size: 0.85rem;
-}
-.dialog_box .dialog_body .input input:focus:invalid{
-    border-color: red;
-}
-.dialog_box .dialog_body .input input:empty:focus:invalid + .hint {
-    display: inline;
-    color: red;
-
-} */
 
 .dialog_box .dialog_body .input.shorturl {
     flex-direction: row;
@@ -814,21 +952,32 @@ a[data-link]:hover {
 
 /* Screen Breakpoints */
 @media screen and (max-width:1180px) {
+    .main .overview_container {
+        grid-template-columns: 40% 1fr;
+    }
+
     .main .links_container .link_list {
         width: 40%;
     }
 
-    .main .links_container .link_overview {
+    .main .links_container .link_info {
         width: 60%;
     }
 }
 
 @media screen and (max-width:900px) {
+    .main .overview_container {
+        grid-template-columns: 50% 1fr;
+        column-gap: 20px;
+        row-gap: 20px;
+        padding: 20px;
+    }
+
     .main .links_container .link_list {
         width: 45%;
     }
 
-    .main .links_container .link_overview {
+    .main .links_container .link_info {
         width: 55%;
     }
 }
@@ -867,21 +1016,38 @@ a[data-link]:hover {
         left: 0;
     }
 
+    .main .overview_container {
+        grid-template-columns: 50% 1fr;
+        column-gap: 10px;
+        row-gap: 10px;
+        padding: 10px;
+    }
+
     .main .links_container .link_list {
         width: 40%;
     }
 
-    .main .links_container .link_overview {
+    .main .links_container .link_info {
         width: 60%;
     }
 }
 
 @media screen and (max-width:550px) {
+    .main .overview_container {
+        grid-template-areas:
+                'view'
+                'last'
+                'perf';
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content min-content min-content;
+        overflow: auto;
+    }
+
     .main .links_container .link_list {
         width: 100%;
     }
 
-    .main .links_container .link_overview {
+    .main .links_container .link_info {
         width: 100vw;
         height: 100vh !important;
         display: flex;
@@ -893,16 +1059,16 @@ a[data-link]:hover {
         transition: left 0.3s ease;
     }
 
-    .main .links_container .link_overview.active {
+    .main .links_container .link_info.active {
         left: 0;
     }
 
-    .main .links_container .link_overview.active .link_header {
+    .main .links_container .link_info.active .link_header {
         display: flex;
     }
 
-    .main .links_container .link_overview .link_details,
-    .main .links_container .link_overview .link_data {
+    .main .links_container .link_info .link_details,
+    .main .links_container .link_info .link_data {
         margin: 10px;
         padding: 20px;
     }

@@ -1,3 +1,7 @@
+if(sessionStorage.sortLinkListBy == undefined){
+    sessionStorage.sortLinkListBy = "datetime"
+}
+
 let makeRequest = async (url) => {
     var p = await fetch(url)
     var response = await p.json()
