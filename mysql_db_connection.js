@@ -1,19 +1,15 @@
 const mysql = require("mysql")
 
-var database = mysql.createConnection({
+const mysql_db_creds = {
     host: "localhost",
     database: "shorturl",
     user: "root",
     password: ""
-})
-// var database = mysql.createConnection({
-//     host: "sql6.freesqldatabase.com",
-//     database: "sql6630821",
-//     user: "sql6630821",
-//     password: "hy4wPCdlVg"
-// })
+}
 
-database.connect(function (err) {
+var mysql_db = mysql.createConnection(mysql_db_creds)
+
+mysql_db.connect(function (err) {
     if (err) {
         console.log(err)
     } else {
@@ -21,4 +17,4 @@ database.connect(function (err) {
     }
 })
 
-module.exports = database
+module.exports = {mysql_db, mysql_db_creds}

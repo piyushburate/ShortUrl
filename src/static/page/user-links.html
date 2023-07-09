@@ -2,6 +2,7 @@
     <div class="title">Links</div>
     <div class="link_list">
         <div class="title">Overview</div>
+        <div class="link_list_container"></div>
         <!-- Sample Link -->
         <!-- <div class="link" data-id="id" data-code="code">
             <span class="link_active"></span>
@@ -155,7 +156,19 @@
     }
 
 
+    var sortLinkList = (n, data) => {
+        return data.sort((d1, d2) => {
+            if (n == "clicks") {
+                $(".link_list .title").text("Sort by link clicks")
+                return d2.clicks - d1.clicks
+            } else {
+                $(".link_list .title").text("Sort by date created")
+                return d2.datetime_ms - d1.datetime_ms
+            }
+        })
+    }
     var loadLinks = async () => {
+        $(".link_list .link_list_container").html("")
         let data = await makeRequest("/api/db/links")
         if (!data.status) {
             if (data.statusCode == 10) {
@@ -164,7 +177,7 @@
                 console.log(data.result);
             }
         } else {
-            data = data.result
+            data = sortLinkList(sessionStorage.sortLinkListBy, data.result)
             for (let i = 0; i < data.length; i++) {
                 var link =
                     `<div class="link" data-id="${data[i].id}" data-code="${data[i].code}">
@@ -184,9 +197,9 @@
                 linkElement.on("click", async (e) => {
                     await linkClick(linkElement, data[i].id)
                 })
-                $(".link_list").append(linkElement)
+                $(".link_list .link_list_container").append(linkElement)
             }
-
+            
             let code = window.location.search.replace("?code=", "")
             if (code != '' && $("[data-code=" + code + "]")) {
                 $("[data-code=" + code + "]").trigger("click")
@@ -195,12 +208,18 @@
                     $(".link").first()[0].click()
                 }
             }
-
-
         }
     }
-
-
+    
+    $(".link_list .title").on("click", ()=>{
+        var temp = sessionStorage.sortLinkListBy
+        if(temp == "datetime"){
+            sessionStorage.sortLinkListBy = "clicks"
+        } else {
+            sessionStorage.sortLinkListBy = "datetime"
+        }
+        loadLinks()
+    })
 
     $("#edit_link_btn").on("click", async () => {
         openLinkDialog()

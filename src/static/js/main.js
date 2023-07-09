@@ -1,3 +1,6 @@
+if(sessionStorage.sortLinkListBy == undefined){
+    sessionStorage.sortLinkListBy = "datetime"
+}
 let path = null
 
 function goTo(link, page) {

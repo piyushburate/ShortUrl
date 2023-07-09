@@ -1,11 +1,20 @@
 // Requires
 const express = require("express")
 const session = require("express-session")
+const MysqlStore = require("express-mysql-session")(session)
 const path = require("path")
-const database = require("./mysql_db_connection")
+const { mysql_db, mysql_db_creds } = require("./mysql_db_connection")
 
 // Variables
 let app = express()
+const mysql_store_options = {
+    host: mysql_db_creds.host,
+    user: mysql_db_creds.user,
+    password: mysql_db_creds.password,
+    database: mysql_db_creds.database,
+    createDatabaseTable: true
+}
+let mysql_store = new MysqlStore(mysql_store_options)
 let port = 3000
 let statusCodes = {
     OK: 100,
@@ -17,16 +26,18 @@ let statusCodes = {
 // Set use
 app.use("/static", express.static(path.resolve(__dirname, "src", "static")))
 app.use(express.json())
+// app.enable("strict routing")
 app.use(express.urlencoded({ extended: true }))
 app.use(session({
     secret: 'secret',
     resave: false,
+    store: mysql_store,
     saveUninitialized: false,
     cookie: { maxAge: (new Date().getTime() + (30 * 86400 * 1000)) }
 }))
 
 let databaseRequest = async (query) => {
-    let p = await new Promise((resolve) => database.query(query, (err, res) => {
+    let p = await new Promise((resolve) => mysql_db.query(query, (err, res) => {
         if (err) {
             resolve({
                 status: false,
@@ -50,7 +61,7 @@ app.get("/api/db/links", async (req, res) => {
             result: "Login required to get database data."
         })
     } else {
-        var query = `SELECT id, code, link, DATE_FORMAT(datetime, '%b %e, %Y') AS 'datetime', clicks, link_active FROM links WHERE uid = ${req.session.uid}`
+        var query = `SELECT id, code, link, DATE_FORMAT(datetime, '%b %e, %Y') AS 'datetime', UNIX_TIMESTAMP(datetime) AS 'datetime_ms', clicks, link_active FROM links WHERE uid = ${req.session.uid}`
         let data = await databaseRequest(query)
         res.send({
             status: data.status,
@@ -287,10 +298,12 @@ app.get("/:link_code", async (req, res) => {
             }
             res.redirect(data.result[0].link)
         } else {
-            res.redirect("/error")
+            // res.redirect("/error")
+            res.sendStatus(404)
         }
     } else {
-        res.redirect("/error")
+        // res.redirect("/error")
+        res.sendStatus(404)
     }
 })
 // Application Entry Point

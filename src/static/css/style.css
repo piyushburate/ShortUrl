@@ -314,6 +314,7 @@ a[data-link]:hover {
     font-size: 1rem;
     text-align: right;
     border-bottom: var(--section-divider-width) solid var(--section-divider-color);
+    cursor: pointer;
 }
 
 .main .links_container .link_list .link {
@@ -694,6 +695,18 @@ a[data-link]:hover {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
+/* .dialog_box .dialog_body .input span.hint {
+    display: none;
+    font-size: 0.85rem;
+}
+.dialog_box .dialog_body .input input:focus:invalid{
+    border-color: red;
+}
+.dialog_box .dialog_body .input input:empty:focus:invalid + .hint {
+    display: inline;
+    color: red;
+
+} */
 
 .dialog_box .dialog_body .input.shorturl {
     flex-direction: row;
