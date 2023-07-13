@@ -65,6 +65,38 @@ a[data-link]:hover {
     display: none;
 }
 
+.loading-btn {
+    position: relative;
+    color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    color: transparent !important;
+}
+
+.loading-btn::before {
+    content: '';
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.8);
+    border-top: 5px solid transparent;
+    animation: loading-btn 1s infinite linear;
+}
+
+@keyframes loading-btn {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 #app {
     width: 100%;
     height: 100%;
@@ -133,7 +165,7 @@ a[data-link]:hover {
     overflow: hidden;
 }
 
-.box form.form .submit input {
+.box form.form .submit button {
     width: 100%;
     height: 45px;
     font-size: 1.1rem;
@@ -292,6 +324,15 @@ a[data-link]:hover {
     padding: 25px;
 }
 
+.main .overview_container>div .title {
+    width: 100%;
+    font-size: 1.2rem;
+    color: #555;
+    padding: 10px 20px;
+    position: relative;
+    border-bottom: 2px solid #f9f9f9;
+}
+
 .main .overview_container .links_overview {
     grid-area: view;
     border-radius: 6px;
@@ -300,15 +341,6 @@ a[data-link]:hover {
     padding-bottom: 10px;
     box-shadow: 0 4px 10px #ddd;
 
-}
-
-.main .overview_container .links_overview .title {
-    width: 100%;
-    font-size: 1.2rem;
-    color: #555;
-    padding: 10px 20px;
-    position: relative;
-    border-bottom: 2px solid #f9f9f9;
 }
 
 .main .overview_container .links_overview .item {
@@ -365,7 +397,6 @@ a[data-link]:hover {
     flex-direction: column;
 }
 
-.main .overview_container .last_created_links .title,
 .main .overview_container .last_created_links .view_all_links {
     width: 100%;
     padding: 10px 20px;
@@ -417,8 +448,34 @@ a[data-link]:hover {
     overflow: auto;
     background: white;
     box-shadow: 0 4px 10px #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+.main .overview_container .links_performance_overview .most_clicks_links {
+    width: 100%;
+    padding: 30px 40px;
+}
+
+.main .overview_container .links_performance_overview .most_clicks_links table.table {
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 4px;
+    border-collapse: collapse;
+}
+
+.main .overview_container .links_performance_overview .most_clicks_links table.table thead tr {
+    height: 50px;
+    color: #666;
+    border-bottom: 2px solid #ddd;
+    margin: 0px 20px;
+}
+.main .overview_container .links_performance_overview .most_clicks_links table.table tbody tr {
+    height: 50px;
+    text-align: center;
+    color: #333;
+}
 
 .main .links_container {
     width: 100%;
@@ -950,6 +1007,71 @@ a[data-link]:hover {
     cursor: pointer;
 }
 
+.main .profile_container {
+    width: 100%;
+    height: 100%;
+    background: #f4f6fa;
+    display: flex;
+    flex-direction: column;
+}
+
+.main .profile_container .title {
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile_container .profile_view {
+    max-width: 400px;
+    height: 100%;
+    background: white;
+    margin: 30px;
+    padding: 10px 50px 30px 50px;
+    box-shadow: 0px 0px 10px #eee;
+    border-radius: 8px;
+}
+
+.profile_container .profile_view .input {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1rem;
+}
+
+.profile_container .profile_view .input input {
+    height: 45px;
+    border-radius: 4px;
+    border: 1.5px solid #ddd;
+    padding: 0 10px;
+}
+
+.profile_container .profile_view .submit {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile_container .profile_view .submit button {
+    width: 45%;
+    height: 45px;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+}
+
+.profile_container .profile_view .submit button#profile_edit {
+    background: green;
+}
+
+.profile_container .profile_view .submit button#profile_submit {
+    background: #07f;
+}
+
+
 /* Screen Breakpoints */
 @media screen and (max-width:1180px) {
     .main .overview_container {
@@ -1030,14 +1152,23 @@ a[data-link]:hover {
     .main .links_container .link_info {
         width: 60%;
     }
+
+    .main .profile_container {
+        align-items: center;
+    }
+
+    .main .profile_container .profile_view {
+        margin: 10px;
+        padding: 10px 50px;
+    }
 }
 
 @media screen and (max-width:550px) {
     .main .overview_container {
         grid-template-areas:
-                'view'
-                'last'
-                'perf';
+            'view'
+            'last'
+            'perf';
         grid-template-columns: 1fr;
         grid-template-rows: min-content min-content min-content;
         overflow: auto;

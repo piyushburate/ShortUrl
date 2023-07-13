@@ -179,7 +179,7 @@
             }
         } else {
             data = sortLinkList(sessionStorage.sortLinkListBy, data.result)
-            if(data.length > 0) $(".link_list .link_list_container").html("")
+            if (data.length > 0) $(".link_list .link_list_container").html("")
             for (let i = 0; i < data.length; i++) {
                 var link =
                     `<div class="link" data-id="${data[i].id}" data-code="${data[i].code}">
@@ -201,7 +201,7 @@
                 })
                 $(".link_list .link_list_container").append(linkElement)
             }
-            
+
             let code = window.location.search.replace("?code=", "")
             if (code != '' && $("[data-code=" + code + "]")) {
                 $("[data-code=" + code + "]").trigger("click")
@@ -212,10 +212,10 @@
             }
         }
     }
-    
-    $(".link_list .title").on("click", ()=>{
+
+    $(".link_list .title").on("click", () => {
         var temp = sessionStorage.sortLinkListBy
-        if(temp == "datetime"){
+        if (temp == "datetime") {
             sessionStorage.sortLinkListBy = "clicks"
         } else {
             sessionStorage.sortLinkListBy = "datetime"
@@ -225,6 +225,7 @@
 
     $("#edit_link_btn").on("click", async () => {
         openLinkDialog()
+        await btnLoad($("#form_submit"), true)
         $("#create_new_form").attr("action", "/updateShortLink")
         $(".dialog_box .dialog_header .title").text("Edit link")
         $(".dialog_box .dialog_body #form_shorturl").attr("disabled", true)
@@ -233,11 +234,12 @@
         $(".dialog_box .dialog_footer #form_submit").attr("disabled", true)
         let id = $(".link.active").attr("data-id")
         let data = await makeRequest("/api/db/links/" + id)
+        await btnLoad($("#form_submit"), false)
         if (!data.status) {
             if (data.statusCode == 10) {
                 window.location.reload()
             } else {
-                alert("Error: " + data.result)
+                alert(data.result)
                 $("#cancel_bg").trigger("click")
             }
         } else {
@@ -248,7 +250,6 @@
                 $(".dialog_box .dialog_body #form_linkactive").attr("checked", data.result[0].link_active == 1)
                 $(".dialog_box .dialog_footer #form_submit").attr("disabled", false)
             } else {
-                console.log(data);
                 alert("An internal error occured!")
                 $("#cancel_bg").trigger("click")
             }

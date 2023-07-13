@@ -25,7 +25,7 @@
                 required autocomplete="on">
         </div>
         <div class="submit">
-            <input type="submit" value="Submit">
+            <button type="submit" id="form_submit">Submit</button>
         </div>
     </form>
     <div class="extra">
@@ -42,7 +42,6 @@
         }
         var url = $(".form").attr("action")
         var data = await makePostRequest(url, form_data)
-        console.log(data);
         if (data.status) {
             var creds = {
                 username: data.username,
@@ -50,15 +49,14 @@
             }
             var url2 = "/authLogin"
             let data2 = await makePostRequest(url2, creds)
-            // console.log("error");
+            btnLoad($("#form_submit"), false)
             if (data2.status) {
-                alert(data.result)
                 window.location.reload()
             } else {
-                alert("Error: " + data2.result)
+                alert(data2.result)
             }
         } else {
-            alert("Error: " + data.result)
+            alert(data.result)
         }
     }
 
@@ -67,7 +65,7 @@
         if ($("#form_password").val() != $("#form_confirm_password").val()) {
             alert("Error: Password and Confirm Password are not equal!")
         } else {
-            console.log("submitted");
+            btnLoad($("#form_submit"), true)
             signup()
         }
     })

@@ -11,7 +11,7 @@
             <a href="#">Forgot password?</a>
         </div>
         <div class="submit">
-            <input type="submit" value="Submit">
+            <button type="submit" id="form_submit">Submit</button>
         </div>
     </form>
     <div class="extra">
@@ -26,17 +26,18 @@
         }
         var url = $(".form").attr("action")
         var data = await makePostRequest(url, form_data)
+        await ($("#form_submit"), false)
         if (data.status) {
-            alert(data.result)
             window.location.reload()
         } else {
-            alert("Error: " + data.result)
+            alert(data.result)
         }
     }
 
-    $(".form").on("submit", e => {
+    $(".form").on("submit", async (e) => {
         e.preventDefault()
-        login()
+        btnLoad($("#form_submit"), true)
+        await login()
     })
 
 </script>

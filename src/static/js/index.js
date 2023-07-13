@@ -17,3 +17,8 @@ let makePostRequest = async (url, data) => {
     let response = await p.json()
     return response
 }
+
+let btnLoad = (btn, bool) => {
+    $(btn).attr("disabled", bool)
+    $(btn).toggleClass("loading-btn", bool)
+}

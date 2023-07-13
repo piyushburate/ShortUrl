@@ -29,7 +29,7 @@
                 </svg>
                 <span class="title">Links</span>
             </a>
-            <a href="#" class="menuitem profile" data-link>
+            <a href="profile" class="menuitem profile" data-link="user">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="icon">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,6 +132,7 @@
 
     $("#create_new_form").on("submit", async (e) => {
         e.preventDefault()
+        await btnLoad($("#form_submit"), true)
         let longurl = $("#form_longurl").val()
         let title = $("#form_title").val()
         let shorturl = $("#form_shorturl").val()
@@ -144,6 +145,7 @@
         }
         let url = $("#create_new_form").attr("action")
         let req = await makePostRequest(url, form_data)
+        await btnLoad($("#form_submit"), false)
         if (req.status) {
             alert(req.result)
             $("#cancel_bg").trigger("click")
